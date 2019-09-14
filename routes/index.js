@@ -3,7 +3,11 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  res.render('index', { title: 'Express' });
+  res.render('video/index', { title: 'Home' });
+});
+
+router.get('/:id', (req, res, next) => {
+  res.render('video/detail', { title: 'Detail' , id: req.params.id});
 });
 
 router.get('/login', (req, res, next) => {

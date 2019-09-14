@@ -72,19 +72,6 @@ $(document).ready(function() {
     }, 550);
   });
 
-  // Change the collor of navbar collapse
-  $('#navbarToggler').on('show.bs.collapse', function() {
-    if ($('nav').hasClass('navbar-transparent') && $(document).scrollTop() < 50) {
-      $('.navbar').addClass('no-transition');
-      $('nav').removeClass('navbar-transparent');
-    }
-  }).on('hidden.bs.collapse', function() {
-    if ($(document).scrollTop() < 50) {
-      $('.navbar').removeClass('no-transition');
-      $('nav:first-of-type').addClass('navbar-transparent');
-    }
-  });
-
   $navbar = $('.navbar[color-on-scroll]');
   scroll_distance = $navbar.attr('color-on-scroll') || 500;
 
@@ -154,12 +141,12 @@ pk = {
     if ($(document).scrollTop() > $(".navbar").attr("color-on-scroll")) {
       if (transparent) {
         transparent = false;
-        $('.navbar[color-on-scroll]').removeClass('navbar-transparent');
+        // $('.navbar[color-on-scroll]').removeClass('navbar-transparent');
       }
     } else {
       if (!transparent) {
         transparent = true;
-        $('.navbar[color-on-scroll]').addClass('navbar-transparent');
+        // $('.navbar[color-on-scroll]').addClass('navbar-transparent');
       }
     }
   }, 17),

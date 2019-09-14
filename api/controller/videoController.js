@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const Video = mongoose.model('Video');
 var ObjectId = require('mongoose').Types.ObjectId
 const videoController = {}
+const request = require('request')
+const constants = require('../../config/constants')
 
 videoController.getVideosPaging = async (req, res) => {
     // seetings
@@ -12,13 +14,11 @@ videoController.getVideosPaging = async (req, res) => {
     var total = 0;
 
     if (req.query.page) page = req.query.page;
-
-    var query = {};
-    var search = req.query.search;
-
+    var search = req.query.search
+    var query = {}
     if (search) {
         var regex = new RegExp(search, "i");
-        var query = {
+        query = {
             name: regex
         };
     }
@@ -41,6 +41,30 @@ videoController.getVideosPaging = async (req, res) => {
         });
 
     }).sort('-name').skip((page - 1) * per_page).limit(per_page);
+}
+
+videoController.getVideosPagingV2 = async (req, res) => {
+    var query = {
+        key: constants.YOUTUBE_API_KEY,
+        type: 'video',
+        maxResults: 5,
+        part: 'snippet',
+        location: req.query.location,
+        locationRadius: req.query.locationRadius,
+        pageToken: req.query.pageToken
+    }
+    request.get({
+        url: constants.YOUTUBE_URI_SEARCH,
+        qs: query
+    }, (err, response) => {
+        var result = JSON.parse(response.body)
+        // result.items.map((e) => {
+        //     if(e.snippet.title.length > 25) {
+        //         e.snippet.title = e.snippet.title.substring(0,25) + '...'
+        //       }
+        // })
+        return res.send(result)
+    })
 }
 
 videoController.getVideo = async (id, res) => {

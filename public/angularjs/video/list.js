@@ -1,43 +1,54 @@
 var app = angular.module('RestaffChallenge', ['ui.bootstrap']);
-
+var videos = []
 app.controller('listController', function ($scope, $http) {
-
   $scope.videos = [];
-  // set page
-  $scope.setPage = function (pageNo) {
-    $scope.currentPage = pageNo;
-  };
-
-  // page changed
-  $scope.pageChanged = function () {
-    paginateMethod()
-  };
-
-  $scope.search = function () {
-    paginateMethod()
+  $scope.nextPageToken = null;
+  $scope.prevPageToken = null;
+  $scope.isPrevPage = true
+  
+  $scope.prevPage = function () {
+    paginateMethod(true)
   }
 
-  paginateMethod()
+  $scope.nextPage = function () {
+    paginateMethod(false)
+  }
 
-  /* http and paginate object */
-  function paginateMethod () {
+  $("form").on("submit", function (e) {
+    paginateMethod(null)
+  })
 
-    var search = ($scope.input) ? $scope.input : null;
-    var currentPage = $scope.currentPage;
-    var data = { page: currentPage, search: search };
+  paginateMethod(null)
+
+  function paginateMethod(isPrevPage) {
+    var page = null
+    if(isPrevPage != null) {
+      page = isPrevPage ? $scope.prevPageToken : $scope.nextPageToken
+    }
+    var data = {
+      location: $('#location').val() != '' ? $('#location').val() : null,
+      locationRadius: $('#locationRadius').val() != '' ? $('#locationRadius').val() + 'km' : null,
+      pageToken: page
+    }
 
     $http.get('api/video', { params: data })
       .then(function (response) {
-        $scope.videos = response.data.data;
-        /* Update pagination object */
-        $scope.pagination = {
-          currentPage: 1,
-          maxSize: 50,
-          totalItems: response.data.count,
-        };
+        $scope.videos = response.data.items
+        $scope.nextPageToken = response.data.nextPageToken ? response.data.nextPageToken : null
+        $scope.prevPageToken = response.data.prevPageToken ? response.data.prevPageToken : null
       }, function (response) {
-        // not found videos
       });
   }
 
 });
+
+// function init() {
+//   gapi.client.setApiKey("AIzaSyAdpZAX_r0-ZH4GrdeCZOGpmMRqwAKRxdc");
+//   return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+//     .then(function () {
+//         console.log("GAPI client loaded for API");
+//       },
+//       function (err) {
+//         console.error("Error loading GAPI client for API", err);
+//       });
+// }

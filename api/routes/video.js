@@ -4,7 +4,7 @@ const videoController = require('../controller/videoController')
 
 router.get('/', async (req, res) => {
     try {
-        await videoController.getVideosPaging(req, res)
+        await videoController.getVideosPagingV2(req, res)
     } catch (error) {
         console.log(error)
         res.status(error.status || 500).send(error)
