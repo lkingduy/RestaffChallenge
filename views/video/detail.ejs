@@ -1,14 +1,14 @@
 <% layout('../shared/layout') -%>
-<div class="container-fluid" ng-controller='listController'>
+<div class="container-fluid" ng-controller='detailController'>
     <div class="row" style="margin-top: 70px">
         <div class="col-md-6 ml-auto mr-auto" style="margin-top: 70px">
-            <iframe class="video w100" width="640" height="360" src="//www.youtube.com/embed/<%- id %>" frameborder="0" allowfullscreen></iframe>
+            <iframe class="video w100" width="640" height="360" src="//www.youtube.com/embed/<%- id %>" frameborder="0"
+                allowfullscreen></iframe>
         </div>
-        </div>
-        <br/>
-        <div class="row">
-            <div class="col-md-6 ml-auto mr-auto">
-                    <a href="/" class="btn btn-outline-danger btn-round">Back to home</a>
-            </div>
-        </div>
-        </div>
+    </div>
+    <br />
+    <div class="row">
+        <a href="/" class="btn btn-outline-danger btn-round col-md-2 ml-auto mr-auto">Back to home</a>
+    </div>
+</div>
+<script src="/angularjs/video/detail.js"></script>

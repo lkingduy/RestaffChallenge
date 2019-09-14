@@ -5,7 +5,8 @@ const CONFIG_VALUE = {
   "password": "truonglucduy1997"
 }
 
-const YOUTUBE_API_KEY = "AIzaSyB4rra72BIT-RuBMeF0gfojJTEoDPHdzTI"
+// const YOUTUBE_API_KEY = "AIzaSyB4rra72BIT-RuBMeF0gfojJTEoDPHdzTI"
+const YOUTUBE_API_KEY = "AIzaSyAdpZAX_r0-ZH4GrdeCZOGpmMRqwAKRxdc"
 
 const YOUTUBE_URI_SEARCH = "https://www.googleapis.com/youtube/v3/search"
 

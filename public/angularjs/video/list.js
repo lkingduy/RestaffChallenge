@@ -1,33 +1,62 @@
 var app = angular.module('RestaffChallenge', ['ui.bootstrap']);
 var videos = []
-app.controller('listController', function ($scope, $http) {
+app.controller('listController', function ($scope, $http, $sce) {
   $scope.videos = [];
   $scope.nextPageToken = null;
   $scope.prevPageToken = null;
   $scope.isPrevPage = true
-  
+  $scope.checkHavePrevPage = 0
   $scope.prevPage = function () {
-    paginateMethod(true)
+    setTimeout(function() {
+      paginateMethod(true)
+    }, 1000)
+    // paginateMethod(true)
+    $scope.checkHavePrevPage = $scope.checkHavePrevPage > 0 ? $scope.checkHavePrevPage - 1 : $scope.checkHavePrevPage 
   }
 
   $scope.nextPage = function () {
-    paginateMethod(false)
+    setTimeout(function() {
+      paginateMethod(false)
+    }, 1000)
+    // paginateMethod(false)
+    $scope.checkHavePrevPage += 1
+  }
+
+  $scope.detailVideo = function(id) {
+      window.location.href = '/' + id
   }
 
   $("form").on("submit", function (e) {
-    paginateMethod(null)
+    // paginateMethod(null)
+    $scope.checkHavePrevPage = 0
+    setTimeout(function() {
+      paginateMethod(null)
+    }, 1000)
   })
-
-  paginateMethod(null)
+  
+  setTimeout(function() {
+    paginateMethod(null)
+  }, 1000)
+  
 
   function paginateMethod(isPrevPage) {
     var page = null
     if(isPrevPage != null) {
       page = isPrevPage ? $scope.prevPageToken : $scope.nextPageToken
     }
+    // var data = {
+    //   location: $('#location').val() != '' ? $('#location').val() : null,
+    //   locationRadius: $('#locationRadius').val() != '' ? $('#locationRadius').val() + 'km' : null,
+    //   pageToken: page
+    // }
+    var latitude = $('#latitude').val()
+    var longtitude = $('#longtitude').val()
+    var locationRadius = $('#locationRadius').val()
+
     var data = {
-      location: $('#location').val() != '' ? $('#location').val() : null,
-      locationRadius: $('#locationRadius').val() != '' ? $('#locationRadius').val() + 'km' : null,
+      location: latitude != '' && longtitude != '' 
+      ? latitude + ',' + longtitude : null,
+      locationRadius: locationRadius != '' ? locationRadius + 'km' : null,
       pageToken: page
     }
 
@@ -36,19 +65,8 @@ app.controller('listController', function ($scope, $http) {
         $scope.videos = response.data.items
         $scope.nextPageToken = response.data.nextPageToken ? response.data.nextPageToken : null
         $scope.prevPageToken = response.data.prevPageToken ? response.data.prevPageToken : null
-      }, function (response) {
+      }, function (err) {
+        console.log(err);
       });
   }
-
 });
-
-// function init() {
-//   gapi.client.setApiKey("AIzaSyAdpZAX_r0-ZH4GrdeCZOGpmMRqwAKRxdc");
-//   return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-//     .then(function () {
-//         console.log("GAPI client loaded for API");
-//       },
-//       function (err) {
-//         console.error("Error loading GAPI client for API", err);
-//       });
-// }
