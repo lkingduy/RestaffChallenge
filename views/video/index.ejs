@@ -24,7 +24,13 @@
       </form>
     </div>
   </div>
-  <div class="row" ng-if='videos.length > 0'>
+  <div class="row">
+      <div class="col-md-2 mr-auto ml-auto">
+          <div class="loader" ng-show='isProcessing'>
+            </div>
+      </div>
+    </div>
+  <div class="row" ng-hide='isProcessing'>
     <div class="col-md-1"></div>
     <div class="col-sm-6 col-md-2" ng-repeat="video in videos">
       <span class="detail-video" ng-click='detailVideo(video.id.videoId)'>

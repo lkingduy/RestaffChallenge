@@ -6,6 +6,7 @@ app.controller('listController', function ($scope, $http, $sce) {
   $scope.prevPageToken = null;
   $scope.isPrevPage = true
   $scope.checkHavePrevPage = 0
+  $scope.isProcessing = false
   $scope.prevPage = function () {
     setTimeout(function() {
       paginateMethod(true)
@@ -29,26 +30,17 @@ app.controller('listController', function ($scope, $http, $sce) {
   $("form").on("submit", function (e) {
     // paginateMethod(null)
     $scope.checkHavePrevPage = 0
-    setTimeout(function() {
       paginateMethod(null)
-    }, 1000)
   })
   
-  setTimeout(function() {
     paginateMethod(null)
-  }, 1000)
-  
 
   function paginateMethod(isPrevPage) {
+    $scope.isProcessing = true
     var page = null
     if(isPrevPage != null) {
       page = isPrevPage ? $scope.prevPageToken : $scope.nextPageToken
     }
-    // var data = {
-    //   location: $('#location').val() != '' ? $('#location').val() : null,
-    //   locationRadius: $('#locationRadius').val() != '' ? $('#locationRadius').val() + 'km' : null,
-    //   pageToken: page
-    // }
     var latitude = $('#latitude').val()
     var longtitude = $('#longtitude').val()
     var locationRadius = $('#locationRadius').val()
@@ -68,6 +60,7 @@ app.controller('listController', function ($scope, $http, $sce) {
         $scope.videos = response.data.items
         $scope.nextPageToken = response.data.nextPageToken ? response.data.nextPageToken : null
         $scope.prevPageToken = response.data.prevPageToken ? response.data.prevPageToken : null
+        $scope.isProcessing = false
       }, function (err) {
         console.log(err);
       });
