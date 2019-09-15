@@ -1,5 +1,6 @@
 <% layout('../shared/layout') -%>
 <div class="container-fluid" ng-controller='listController'>
+  <p class="hide" id="user"><%- user %></p>
   <div class="row" style="margin-top: 70px">
     <div class="col-md-1 offset-md-1">
       <div class="title">
@@ -7,7 +8,7 @@
       </div>
     </div>
     <div class="col-md-10">
-      <form id="search-form" class="input-group" action="#" style="margin-top: 25px">
+      <form id="search-form" class="input-group" style="margin-top: 25px">
         <div class="col-md-3">
           <input type="number" step="0.00001" required='required' class="form-control" id="latitude" placeholder="Location (latitude)">
         </div>

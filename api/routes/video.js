@@ -21,14 +21,4 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.post('/', async (req, res) => {
-    try {
-        let video = await videoController.createVideo(req.body, res)
-        return res.status(200).send(video)
-    } catch (error) {
-        console.log(error)
-        res.status(error.status || 500).send(error)
-    }
-})
-
 module.exports = router

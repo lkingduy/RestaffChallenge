@@ -60,7 +60,10 @@ app.controller('listController', function ($scope, $http, $sce) {
       pageToken: page
     }
 
-    $http.get('api/video', { params: data })
+    $http.get('api/video', { headers: {
+      "Content-Type":"application/json",
+      "Authorization" : $('#user').val()
+  }, params: data })
       .then(function (response) {
         $scope.videos = response.data.items
         $scope.nextPageToken = response.data.nextPageToken ? response.data.nextPageToken : null

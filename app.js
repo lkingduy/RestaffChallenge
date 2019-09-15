@@ -9,6 +9,8 @@ const mongoStore = require('connect-mongo')(session);
 var async = require("async");
 const bodyParser = require('body-parser');
 var engine = require('ejs-locals');
+var passport = require('passport');
+
 
 var port = process.env.PORT || 3000;
 const { mongoose } = require('./config/db');
@@ -38,6 +40,11 @@ app.use(session({
   saveUninitialized : true,
   cookie : { maxAge: 7 * 24 * 3600 * 1000, secure: false}
 }));
+app.use(require('express-session')({ secret: 'mysecret', resave: true, saveUninitialized: true }));
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

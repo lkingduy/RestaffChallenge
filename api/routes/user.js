@@ -12,6 +12,12 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/logout' ,function(req, res){
+    req.logout();
+    req.session.destroy()
+    res.redirect('/');
+  })
+
 router.get('/:id', async (req, res) => {
     try {
         let user = await userController.getUser(req.params.id, res)

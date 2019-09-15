@@ -44,51 +44,39 @@ videoController.getVideosPaging = async (req, res) => {
 }
 
 videoController.getVideosPagingV2 = async (req, res) => {
-    var query = {
-        key: constants.YOUTUBE_API_KEY,
-        type: 'video',
-        maxResults: 5,
-        part: 'snippet',
-        location: req.query.location,
-        locationRadius: req.query.locationRadius,
-        pageToken: req.query.pageToken
+    let token = req.session.user ? req.session.user.token : req.headers.Authorization
+    if(!token) res.status(403).send({sucess: false, msg: constants.responseStatus.TOKEN_NOT_FOUND})
+    else {
+        var query = {
+            key: constants.YOUTUBE_API_KEY,
+            type: 'video',
+            maxResults: 5,
+            part: 'snippet',
+            location: req.query.location,
+            locationRadius: req.query.locationRadius,
+            pageToken: req.query.pageToken
+        }
+        request.get({
+            url: constants.YOUTUBE_URI_SEARCH,
+            qs: query
+        }, (err, response) => {
+            var result = JSON.parse(response.body)
+            // result.items.map((e) => {
+            //     if(e.snippet.title.length > 25) {
+            //         e.snippet.title = e.snippet.title.substring(0,25) + '...'
+            //       }
+            // })
+            return res.send(result)
+        })
     }
-    request.get({
-        url: constants.YOUTUBE_URI_SEARCH,
-        qs: query
-    }, (err, response) => {
-        var result = JSON.parse(response.body)
-        // result.items.map((e) => {
-        //     if(e.snippet.title.length > 25) {
-        //         e.snippet.title = e.snippet.title.substring(0,25) + '...'
-        //       }
-        // })
-        return res.send(result)
-    })
 }
 
 videoController.getVideo = async (id, res) => {
     if (!ObjectId.isValid(req.params.id))
-        return res.status(400).send(`No record with given id: ${req.params.id}`)
+        return res.status(400).send(`${constants.responseStatus.NO_RECORD_WITH_ID}: ${req.params.id}`)
 
     let video = await Video.findById(id)
     return video
-}
-
-videoController.createVideo = async (item, res) => {
-    let _video = await Video.findOne({
-        name: item.name,
-        author: item.author
-    })
-    if (_video) throw res.status(403).send({
-        success: false,
-        msg: "This video's name existed, please try another!"
-    })
-    else {
-        let video = new Video(item)
-        await video.save()
-        return video
-    }
 }
 
 module.exports = videoController

@@ -42,7 +42,7 @@ userController.createUser = async (item, res) => {
         })
         if (_user) throw res.status(403).send({
             success: false,
-            msg: 'This account existed'
+            msg: 'This username existed, try another!'
         })
         else {
             let user = new User(item)
